@@ -87,16 +87,25 @@ resource "aws_mq_broker" "activemq" {
 
 data "aws_ami" "amazon-linux-2" {
   most_recent = true
+
   filter {
     name   = "owner-alias"
     values = ["amazon"]
   }
+
   filter {
     name   = "name"
-    values = ["amzn2-ami-kernel-*-arm64-*"]
+    values = ["amzn2-ami-ecs-hvm*"]
   }
+
+  filter {
+    name   = "architecture"
+    values = ["arm64"]
+  }
+
   owners = ["amazon"]
 }
+
 
 data "template_file" "user_data" {
   template = file(var.master_user_data_path == "" ? "${path.module}/user_data.sh" : var.master_user_data_path)
